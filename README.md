@@ -26,7 +26,7 @@
 | -c, --cluster-name NAME | OpenShift 4 cluster name<br>Default: ocp4 |
 | -d, --cluster-domain DOMAIN | OpenShift 4 cluster domain<br>Default: local |
 | -m, --masters N | Number of masters to deploy<br>Default: 3 |
-| -w, --worker N | Number of workers to deploy<br>Default: 2 |
+| -w, --workers N | Number of workers to deploy<br>Default: 2 |
 | --master-cpu N | Number of CPUs for the master VM(s)<br>Default: 4 |
 | --master-mem SIZE(MB) | RAM size (MB) of master VM(s)<br>Default: 16000 |
 | --worker-cpu N | Number of CPUs for the worker VM(s)<br>Default: 4 |
