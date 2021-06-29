@@ -7,5 +7,6 @@ NAME=${1}
   --cpu 16 \
   --memory 16000 \
   --add-disk 500 \
+  --add-disk 100 \
   --vm-dir ${mydir}/VMs/${mycluster} \
   --libvirt-network default
