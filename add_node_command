@@ -1,12 +1,11 @@
 #!/bin/bash
 export mycluster=ocp47
-export mydir=/VirtualMachines
-export mypath=${mydir}/ocp4_setup_upi_kvm
+export vmdir=/VirtualMachines/VMs
 NAME=${1}
 ./add_node.sh --name ${NAME} \
   --cpu 16 \
   --memory 16000 \
-  --add-disk 500 \
   --add-disk 100 \
-  --vm-dir ${mydir}/VMs/${mycluster} \
+  --add-disk 500 \
+  --vm-dir ${vmdir}/${mycluster} \
   --libvirt-network default
