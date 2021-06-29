@@ -1,5 +1,6 @@
 #!/bin/bash
 export mycluster=ocp47
+export mycwd=${PWD}
 export vmdir=/VirtualMachines/VMs
 mkdir -p ${vmdir}/${mycluster}
 
@@ -51,11 +52,7 @@ start_all_vm
 EOF
 
 sed -i "s/mycluster/${mycluster}/g" ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
-
-echo "ls -l pull-secret"
-ls -l pull-secret
-
-exit 0
+chmod +x ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 
 ./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
  --ocp-version 4.7 \
@@ -64,8 +61,8 @@ exit 0
  --lb-mem 4096 \
  --libvirt-network default \
  --vm-dir ${vmdir}/${mycluster} \
- --setup-dir ${mycluster}_setup \
- --cache-dir ${vmdir}/ISOs \
+ --setup-dir ${mycwd}/${mycluster}_setup \
+ --cache-dir /VirtualMachines/ISOs \
  --masters 3 \
  --master-cpu 4 \
  --master-mem 16000 \
