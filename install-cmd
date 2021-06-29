@@ -1,9 +1,10 @@
 #!/bin/bash
 export mycluster=ocp47
-export mydir=/VirtualMachines
-export mypath=${mydir}/ocp4_setup_upi_kvm
-mkdir -p ${mydir}/VMs/${mycluster}
-cat << 'EOF' > ${mydir}/VMs/${mycluster}/restore_${mycluster}_cluster.sh
+export vmdir=/VirtualMachines/VMs
+mkdir -p ${vmdir}/${mycluster}
+
+# Get a script to restore cluster 
+cat << 'EOF' > ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 #!/bin/bash
 
 set -e
@@ -49,17 +50,22 @@ create_new_overlay
 start_all_vm
 EOF
 
-sed -i "s/mycluster/${mycluster}/g" ${mydir}/VMs/${mycluster}/restore_${mycluster}_cluster.sh
+sed -i "s/mycluster/${mycluster}/g" ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
+
+echo "ls -l pull-secret"
+ls -l pull-secret
+
+exit 0
 
 ./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
  --ocp-version 4.7 \
- --pull-secret ${mypath}/pull-secret-ddo/pull-secret.txt \
+ --pull-secret pull-secret/pull-secret.txt \
  --cluster-name ${mycluster} \
  --lb-mem 4096 \
  --libvirt-network default \
- --vm-dir ${mydir}/VMs/${mycluster} \
- --setup-dir ${mypath}/ocp4_setup_${mycluster} \
- --cache-dir ${mydir}/ISOs \
+ --vm-dir ${vmdir}/${mycluster} \
+ --setup-dir ${mycluster}_setup \
+ --cache-dir ${vmdir}/ISOs \
  --masters 3 \
  --master-cpu 4 \
  --master-mem 16000 \
