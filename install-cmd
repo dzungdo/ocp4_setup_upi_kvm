@@ -1,0 +1,70 @@
+#!/bin/bash
+export mycluster=ocp47
+export mydir=/VirtualMachines
+export mypath=${mydir}/ocp4_setup_upi_kvm
+mkdir -p ${mydir}/VMs/${mycluster}
+cat << 'EOF' > ${mydir}/VMs/${mycluster}/restore_${mycluster}_cluster.sh
+#!/bin/bash
+
+set -e
+CLUSTER=mycluster
+
+ok() {
+        test -z "$1" && echo "ok" || echo "$1"
+}
+
+destroy_all_vm() {
+        for VM in $(virsh list --all --name | grep "${CLUSTER}-storage\|${CLUSTER}-lb\|${CLUSTER}-master-\|${CLUSTER}-worker-\|${CLUSTER}-bootstrap")
+        do
+                echo -n "XXXX> Destroy VM ${VM}: "
+                virsh destroy "${VM}" &> /dev/null || echo -n "Stopping VM failed (ignoring)... "
+                ok
+
+                echo -n "XXXX> Remove all backing images for ${VM}..."
+                rm -f "${VM}*.qcow2.ovl" &> /dev/null || echo -n "No backing image to remove (ignoring)... "
+                ok
+        done
+}
+create_new_overlay() {
+        for i in $(ls *.qcow2)
+        do
+                echo -n "XXXX> Create new backing image from ${i} ..."
+                qemu-img create -f qcow2 -b ${i}  ${i}.ovl &> /dev/null || echo -n "Error creating backing image!!!"
+                ok
+        done
+}
+start_all_vm() {
+        for VM in $(virsh list --all --name | grep "${CLUSTER}-storage\|${CLUSTER}-lb\|${CLUSTER}-master-\|${CLUSTER}-worker-\|${CLUSTER}-bootstrap")
+        do
+                echo -n "XXXX> Starting ${VM}..."
+                virsh start "${VM}" &> /dev/null || echo -n "${VM} already running (ignoring)... "
+                ok
+                sleep 10
+        done
+}
+
+# Main
+destroy_all_vm
+create_new_overlay
+start_all_vm
+EOF
+
+sed -i "s/mycluster/${mycluster}/g" ${mydir}/VMs/${mycluster}/restore_${mycluster}_cluster.sh
+
+./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
+ --ocp-version 4.7 \
+ --pull-secret ${mypath}/pull-secret-ddo/pull-secret.txt \
+ --cluster-name ${mycluster} \
+ --lb-mem 4096 \
+ --libvirt-network default \
+ --vm-dir ${mydir}/VMs/${mycluster} \
+ --setup-dir ${mypath}/ocp4_setup_${mycluster} \
+ --cache-dir ${mydir}/ISOs \
+ --masters 3 \
+ --master-cpu 4 \
+ --master-mem 16000 \
+ --workers 3 \
+ --worker-cpu 8 \
+ --worker-mem 16000 \
+ --dns-dir /etc/NetworkManager/dnsmasq.d \
+ --fresh-download

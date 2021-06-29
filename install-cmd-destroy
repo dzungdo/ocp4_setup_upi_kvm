@@ -1,0 +1,16 @@
+#!/bin/bash
+export mycluster=ocp47
+export mydir=/VirtualMachines
+export mypath=${mydir}/ocp4_setup_upi_kvm
+mkdir -p ${mydir}/VMs/${mycluster}
+./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap --destroy \
+ --ocp-version 4.7 \
+ --pull-secret ${mypath}/pull-secret-ddo/pull-secret.txt \
+ --cluster-name ${mycluster} \
+ --lb-mem 4096 \
+ --vm-dir ${mydir}/VMs/${mycluster} \
+ --setup-dir ${mypath}/ocp4_setup_${mycluster} \
+ --cache-dir ${mydir}/ISOs \
+ --workers 2 \
+ --worker-mem 16000 \
+--dns-dir /etc/NetworkManager/dnsmasq.d
