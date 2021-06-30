@@ -54,14 +54,14 @@ EOF
 sed -i "s/mycluster/${mycluster}/g" ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 chmod +x ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 
+echo "
 ./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
  --ocp-version 4.7 \
  --pull-secret pull-secret/pull-secret.txt \
  --cluster-name ${mycluster} \
  --lb-mem 4096 \
- --libvirt-network default \
  --vm-dir ${vmdir}/${mycluster} \
- --setup-dir ${mycwd}/${mycluster}_setup \
+ --setup-dir ${mycwd}/setup_dir_${mycluster} \
  --cache-dir /VirtualMachines/ISOs \
  --masters 3 \
  --master-cpu 4 \
@@ -70,4 +70,6 @@ chmod +x ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
  --worker-cpu 8 \
  --worker-mem 16000 \
  --dns-dir /etc/NetworkManager/dnsmasq.d \
- --fresh-download
+ --fresh-download \
+ --libvirt-oct 147
+ "

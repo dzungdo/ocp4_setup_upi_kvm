@@ -1,11 +1,15 @@
 #!/bin/bash
-export mycluster=ocp47
-export vmdir=/VirtualMachines/VMs
+mycluster=ocp47
+vmdir=/VirtualMachines/VMs
+mycwd=${PWD}
 NAME=${1}
+mkdir -p ${vmdir}/${mycluster}
 ./add_node.sh --name ${NAME} \
   --cpu 16 \
   --memory 16000 \
   --add-disk 100 \
   --add-disk 500 \
   --vm-dir ${vmdir}/${mycluster} \
-  --libvirt-network default
+  --libvirt-oct 147 \
+  --libvirt-oct \
+  --setup-dir ${cwd}/setup_dir_${mycluster}
