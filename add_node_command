@@ -10,5 +10,4 @@ mkdir -p ${vmdir}/${mycluster}
   --add-disk 200 \
   --add-disk 500 \
   --vm-dir ${vmdir}/${mycluster} \
-  --libvirt-oct 147 \
-  --setup-dir ${cwd}/setup_dir_${mycluster}
+  --libvirt-oct 147
