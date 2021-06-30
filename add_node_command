@@ -7,7 +7,7 @@ mkdir -p ${vmdir}/${mycluster}
 ./add_node.sh --name ${NAME} \
   --cpu 16 \
   --memory 16000 \
-  --add-disk 100 \
+  --add-disk 200 \
   --add-disk 500 \
   --vm-dir ${vmdir}/${mycluster} \
   --libvirt-oct 147 \
