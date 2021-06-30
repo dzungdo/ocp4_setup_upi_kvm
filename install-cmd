@@ -54,7 +54,6 @@ EOF
 sed -i "s/mycluster/${mycluster}/g" ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 chmod +x ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 
-echo "
 ./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
  --ocp-version 4.7 \
  --pull-secret pull-secret/pull-secret.txt \
@@ -72,4 +71,3 @@ echo "
  --dns-dir /etc/NetworkManager/dnsmasq.d \
  --fresh-download \
  --libvirt-oct 147
- "
