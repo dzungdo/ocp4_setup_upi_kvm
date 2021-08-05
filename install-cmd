@@ -1,7 +1,11 @@
 #!/bin/bash
-export mycluster=ocp47
-export mycwd=${PWD}
-export vmdir=/VirtualMachines/VMs
+
+mycluster=ocp47
+mydate=$( date +%b%d-%H%M )
+subdomain=${mydate,,}
+mycwd=${PWD}
+vmdir=/VirtualMachines/VMs
+
 mkdir -p ${vmdir}/${mycluster}
 
 # Get a script to restore cluster 
@@ -55,6 +59,7 @@ sed -i "s/mycluster/${mycluster}/g" ${vmdir}/${mycluster}/restore_${mycluster}_c
 chmod +x ${vmdir}/${mycluster}/restore_${mycluster}_cluster.sh
 
 ./ocp4_setup_upi_kvm.sh --yes --keep-bootstrap \
+ --cluster-domain ${subdomain}.local
  --ocp-version 4.7 \
  --pull-secret pull-secret/pull-secret.txt \
  --cluster-name ${mycluster} \
